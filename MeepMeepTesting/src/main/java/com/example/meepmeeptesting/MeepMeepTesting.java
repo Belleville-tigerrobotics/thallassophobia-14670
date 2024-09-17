@@ -47,7 +47,7 @@ public class MeepMeepTesting {
                 .addEntity(myBot)
                 .start();
 */
-        meepMeep.setBackground(MeepMeep.Background.)
+        meepMeep.setBackground(MeepMeep.Background.FIELD_FREIGHTFRENZY_OFFICIAL)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
                 .addEntity(myBot)
