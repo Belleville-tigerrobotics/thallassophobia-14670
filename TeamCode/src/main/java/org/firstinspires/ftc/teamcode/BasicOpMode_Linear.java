@@ -66,9 +66,9 @@ public class BasicOpMode_Linear extends LinearOpMode {
 
     private double cubicDelinear(double input){
         if (input < 0){
-            return input*input;
-        }else{
             return -(input*input);
+        }else{
+            return input*input;
         }
     }
 
@@ -150,7 +150,7 @@ public class BasicOpMode_Linear extends LinearOpMode {
 
 
             PoseVelocity2d input = new PoseVelocity2d(
-                    new Vector2d(-yval, -xval), (cubicDelinear(gamepad1.right_stick_x)*.7)
+                    new Vector2d(-yval, -xval), (cubicDelinear(-gamepad1.right_stick_x)*.7)
             );
 
             // Pass in the rotated input + right stick value for rotation
