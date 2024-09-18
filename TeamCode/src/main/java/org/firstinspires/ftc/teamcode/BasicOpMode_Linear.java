@@ -64,13 +64,17 @@ public class BasicOpMode_Linear extends LinearOpMode {
 
     private MecanumDrive drive;
 
-    private double cubicDelinear(double input){
+    private static double cubicDelinear(double input){
         if (input < 0){
             return -(input*input);
         }else{
             return input*input;
         }
     }
+
+//    public static Vector2d rotateVector(Vector2d input, double roatationAngle){
+//
+//    }
 
     @Override
     public void runOpMode() {
@@ -150,16 +154,20 @@ public class BasicOpMode_Linear extends LinearOpMode {
 
 
             PoseVelocity2d input = new PoseVelocity2d(
-                    new Vector2d(-yval, -xval), (cubicDelinear(-gamepad1.right_stick_x)*.7)
+                    new Vector2d(-yval, -xval),(poseEstimate.heading.toDouble())
             );
+
+            PoseVelocity2d rotatedinput = new PoseVelocity2d(
+                    input.linearVel,  (cubicDelinear(-gamepad1.right_stick_x)*.7));
 
             // Pass in the rotated input + right stick value for rotation
             // Rotation is not part of the rotated input thus must be passed in separately
 
-            drive.setDrivePowers( input);
+            drive.setDrivePowers(  rotatedinput );
+ //           (cubicDelinear(-gamepad1.right_stick_x)*.7)
 
-
-
+//don't forget to do this every loop to ensure our location gets updated
+            drive.updatePoseEstimate();
 
 
             // Show the elapsed game time and wheel power.
