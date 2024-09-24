@@ -31,6 +31,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.PoseVelocity2d;
+import com.acmerobotics.roadrunner.Rotation2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -39,6 +40,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import java.util.Vector;
 
 /*
  * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
@@ -66,9 +68,9 @@ public class BasicOpMode_Linear extends LinearOpMode {
 
     private static double cubicDelinear(double input){
         if (input < 0){
-            return -(input*input);
+            return -(input*input*input*input*.9);
         }else{
-            return input*input;
+            return input*input*input*input*.9;
         }
     }
 
@@ -76,10 +78,23 @@ public class BasicOpMode_Linear extends LinearOpMode {
 //
 //    }
 
+    public double robotdirection ;
+
+    private Vector2d rotateMe(float x, float y, double angle) {
+
+        float x1 = (float)(x * Math.cos(angle) - y * Math.sin(angle));
+
+        float y1 = (float)(x * Math.sin(angle) + y * Math.cos(angle)) ;
+
+        return new Vector2d(x1, y1);
+    }
+
+
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
+
 
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
@@ -109,29 +124,7 @@ public class BasicOpMode_Linear extends LinearOpMode {
             // Setup a variable for each drive wheel to save power level for telemetry
             double leftPower;
             double rightPower;
-/*
-                 // Create a vector from the gamepad x/y inputs
-            // Then, rotate that vector by the inverse of that heading
-            Float yval;
-            yval = (gamepad1.left_stick_y);
-            Float xval;
-            xval = (gamepad1.left_stick_x);
 
-            telemetry.addData("yval",yval);
-            telemetry.addData("y",gamepad1.left_stick_y);
-            telemetry.addData("xval",xval);
-            telemetry.addData("x",gamepad1.left_stick_x);
-
-            drive.setDrivePowers(new PoseVelocity2d(
-                    new Vector2d(
-                            -yval,
-                            -xval
-                    ),
-                    -gamepad1.right_stick_x
-            ));
-
-            drive.updatePoseEstimate();
-*/
             //just reset the pose
             if (gamepad1.back) {
                 drive.pose = (new Pose2d(10, 15, Math.toRadians(0)));//was 90
@@ -147,15 +140,24 @@ public class BasicOpMode_Linear extends LinearOpMode {
             Float xval;
             xval = (gamepad1.left_stick_x);
 
-            telemetry.addData("yval",yval);
-            telemetry.addData("y",gamepad1.left_stick_y);
-            telemetry.addData("xval",xval);
-            telemetry.addData("x",gamepad1.left_stick_x);
 
+            robotdirection = poseEstimate.heading.toDouble();
+            Vector2d adjustedVector = rotateMe(-yval,-xval, -robotdirection );
 
             PoseVelocity2d input = new PoseVelocity2d(
-                    new Vector2d(-yval, -xval),(poseEstimate.heading.toDouble())
-            );
+                    new Vector2d(adjustedVector.x,adjustedVector.y) ,0);
+
+       //     PoseVelocity2d i2 = new PoseVelocity2d(new Rotation2d(poseEstimate.heading.toDouble()).times(new pose2d(5,10,0)));
+            telemetry.addData("Direction",robotdirection);
+            telemetry.addData("y",yval);
+            telemetry.addData("y2", input.linearVel.y);
+
+            telemetry.addData("x",xval);
+            telemetry.addData("x2",input.linearVel.x);
+            telemetry.addData("heading",poseEstimate.heading);
+            telemetry.addData("pose",poseEstimate);
+            telemetry.addData("poseHeading",poseEstimate.heading.toDouble());
+telemetry.update();
 
             PoseVelocity2d rotatedinput = new PoseVelocity2d(
                     input.linearVel,  (cubicDelinear(-gamepad1.right_stick_x)*.7));
@@ -164,18 +166,10 @@ public class BasicOpMode_Linear extends LinearOpMode {
             // Rotation is not part of the rotated input thus must be passed in separately
 
             drive.setDrivePowers(  rotatedinput );
- //           (cubicDelinear(-gamepad1.right_stick_x)*.7)
 
 //don't forget to do this every loop to ensure our location gets updated
             drive.updatePoseEstimate();
 
-
-            // Show the elapsed game time and wheel power.
-            /*
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
-            telemetry.update();
-             */
         }
     }
 }

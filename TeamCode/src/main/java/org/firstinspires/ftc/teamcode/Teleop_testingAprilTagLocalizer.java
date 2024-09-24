@@ -278,16 +278,10 @@ public class Teleop_testingAprilTagLocalizer extends LinearOpMode {
             Float xval;
             xval = (gamepad1.left_stick_x);
 
-            telemetry.addData("yval",yval);
-            telemetry.addData("y",gamepad1.left_stick_y);
-            telemetry.addData("xval",xval);
-            telemetry.addData("x",gamepad1.left_stick_x);
-
-
             PoseVelocity2d input = new PoseVelocity2d(
-                    new Vector2d(-yval, -xval),(poseEstimate.heading.toDouble())
+                    new Vector2d(-cubicDelinear(yval),-cubicDelinear(xval))//.times(poseEstimate.heading.toDouble() )
+                    ,0
             );
-
             PoseVelocity2d rotatedinput = new PoseVelocity2d(
                     input.linearVel,  (cubicDelinear(-gamepad1.right_stick_x)*.7));
 
@@ -296,6 +290,18 @@ public class Teleop_testingAprilTagLocalizer extends LinearOpMode {
 
             drive.setDrivePowers(  rotatedinput );
  //           (cubicDelinear(-gamepad1.right_stick_x)*.7)
+
+            telemetry.addData("y",yval);
+            telemetry.addData("y2", input.linearVel.y);
+
+            telemetry.addData("x",xval);
+            telemetry.addData("x2",input.linearVel.x);
+            telemetry.addData("heading",poseEstimate.heading);
+            telemetry.addData("pose",poseEstimate);
+            telemetry.addData("poseHeading",poseEstimate.heading.toDouble());
+            telemetry.update();
+
+
 
 //don't forget to do this every loop to ensure our location gets updated
             drive.updatePoseEstimate();
