@@ -77,14 +77,60 @@ public class BasicOpMode_Linear extends LinearOpMode {
 //    public static Vector2d rotateVector(Vector2d input, double roatationAngle){
 //
 //    }
+    private double SLEW_RATE= 0.15;
+    private double prevX = 0;
+    private double prevY = 0;
+    private double prevR = 0;
+    private double returnvalue;
+
+
+    private double slewX(double inputX) {
+        if (SLEW_RATE < Math.abs(inputX - prevX)) {
+            returnvalue=inputX;// Can slew
+            if (inputX < prevX) {
+                returnvalue = prevX - SLEW_RATE;
+            } else if (inputX > prevX) {
+                returnvalue = prevX + SLEW_RATE;
+            }
+        }
+        prevX=inputX;
+        return returnvalue; // Close enough that you can just use input
+    }
+    private double slewY(double inputY) {
+        if (SLEW_RATE < Math.abs(inputY - prevY)) {
+            returnvalue=inputY;// Can slew
+            if (inputY < prevY) {
+                returnvalue = prevY - SLEW_RATE;
+            } else if (inputY > prevY) {
+                returnvalue = prevY + SLEW_RATE;
+            }
+        }
+        prevY=inputY;
+        return returnvalue; // Close enough that you can just use input
+    }
+
+    private double slewR(double inputR) {
+        if (SLEW_RATE < Math.abs(inputR - prevR)) {
+            returnvalue=inputR;// Can slew
+            if (inputR < prevY) {
+                returnvalue = prevR - SLEW_RATE;
+            } else if (inputR > prevR) {
+                returnvalue = prevR + SLEW_RATE;
+            }
+        }
+        prevY=inputR;
+        return returnvalue; // Close enough that you can just use input
+    }
+
+
 
     public double robotdirection ;
 
-    private Vector2d rotateMe(float x, float y, double angle) {
+    private Vector2d rotateMe(double x, double y, double angle) {
 
-        float x1 = (float)(x * Math.cos(angle) - y * Math.sin(angle));
+        double x1 = (double)(x * Math.cos(angle) - y * Math.sin(angle));
 
-        float y1 = (float)(x * Math.sin(angle) + y * Math.cos(angle)) ;
+        double y1 = (double)(x * Math.sin(angle) + y * Math.cos(angle)) ;
 
         return new Vector2d(x1, y1);
     }
@@ -135,10 +181,10 @@ public class BasicOpMode_Linear extends LinearOpMode {
 
             // Create a vector from the gamepad x/y inputs
             // Then, rotate that vector by the inverse of that heading
-            Float yval;
-            yval = (gamepad1.left_stick_y);
-            Float xval;
-            xval = (gamepad1.left_stick_x);
+            double yval;
+            yval = slewY(gamepad1.left_stick_y);
+            double xval;
+            xval = slewX(gamepad1.left_stick_x);
 
 
             robotdirection = poseEstimate.heading.toDouble();
@@ -160,7 +206,7 @@ public class BasicOpMode_Linear extends LinearOpMode {
 telemetry.update();
 
             PoseVelocity2d rotatedinput = new PoseVelocity2d(
-                    input.linearVel,  (cubicDelinear(-gamepad1.right_stick_x)*.7));
+                    input.linearVel,  (slewR(cubicDelinear(-gamepad1.right_stick_x)*.7)));
 
             // Pass in the rotated input + right stick value for rotation
             // Rotation is not part of the rotated input thus must be passed in separately
