@@ -115,7 +115,8 @@ public class AprilTagDrive extends MecanumDrive { // TODO: if not using MecanumD
         double x2 = x*Math.cos(botheading)+y*Math.sin(botheading);
         double y2 = x*-Math.sin(botheading)+y*Math.cos(botheading);
         // add FC coordinates to apriltag position
-        // tags is just the CS apriltag library
+        // tags is just the CS apriltag library   //this is where the null is coming from dg
+
         VectorF tagpose = getCenterStageTagLibrary().lookupTag(detection.id).fieldPosition;
 
 

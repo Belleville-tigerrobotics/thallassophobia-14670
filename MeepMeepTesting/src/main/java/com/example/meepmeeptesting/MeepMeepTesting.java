@@ -22,27 +22,21 @@ public class MeepMeepTesting {
 
         myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(36, -62, Math.toRadians(90)))
 //go get the first red block
-  //              .lineToY(-12)
                 .splineToConstantHeading(new Vector2d(42,-12),0)
- //               .splineToConstantHeading(new Vector2d(40,-58),0)
-                   //     .lineToX(40)
-                        .setTangent(Math.toRadians(90))
-                        .lineToY(-58)
+                .setTangent(Math.toRadians(90))
+                .lineToY(-58)
                 .setTangent(Math.toRadians(90))
                  .splineToConstantHeading(new Vector2d (52,-12),0)
                 .setTangent(Math.toRadians(90))
                 .lineToY(-58)
                 .setTangent(Math.toRadians(90))
-                            //    .splineToConstantHeading(new Vector2d(45,-58),0)
-                                .splineToConstantHeading(new Vector2d( 62,-12),0)
+                .splineToConstantHeading(new Vector2d( 62,-12),0)
                 .setTangent(Math.toRadians(90))
                 .lineToY(-58)
                 .setTangent(Math.toRadians(90))
-                                .lineToY(-54)
-                //        .splineToConstantHeading(new Vector2d( 55,-58),0)
+                .lineToY(-54)
  //Now let's go place the clip
-                        .splineToConstantHeading(new Vector2d(10,-34), Math.toRadians(180))
-
+                .splineToConstantHeading(new Vector2d(10,-34), Math.toRadians(180))
 
                .build());
 
