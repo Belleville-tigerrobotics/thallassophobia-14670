@@ -117,8 +117,12 @@ public class AprilTagDrive extends MecanumDrive { // TODO: if not using MecanumD
         // add FC coordinates to apriltag position
         // tags is just the CS apriltag library   //this is where the null is coming from dg
 
-        VectorF tagpose = getCenterStageTagLibrary().lookupTag(detection.id).fieldPosition;
-
+        VectorF tagpose;
+        if (getCenterStageTagLibrary().lookupTag(detection.id) != null) {
+            tagpose = getCenterStageTagLibrary().lookupTag(detection.id).fieldPosition;
+        }else{
+            tagpose = new VectorF(0,0);
+        }
 
         // todo: this will need to be changed for next season (use tag heading to automate??)
         if (!detection.metadata.name.contains("Audience")) { // is it a backdrop tag?
