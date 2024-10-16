@@ -73,6 +73,7 @@ public class Teleop_testingAprilTagLocalizer extends LinearOpMode {
     private DcMotor rightDrive = null;
 
     private MecanumDrive drive;
+    private RobotSystem system;
 
     private static double cubicDelinear(double input){
         if (input < 0){
@@ -219,6 +220,7 @@ public class Teleop_testingAprilTagLocalizer extends LinearOpMode {
         //switching this over to use AprilTagDrive
         drive = new AprilTagDrive(hardwareMap, new Pose2d(0, 0, 0),aprilTag);
 
+
   //set the intiial drive pose
             drive.pose = (new Pose2d(10, 15, Math.toRadians(0)));//was 90
 
@@ -230,6 +232,9 @@ public class Teleop_testingAprilTagLocalizer extends LinearOpMode {
 //        leftDrive.setDirection(DcMotor.Direction.REVERSE);
 //        rightDrive.setDirection(DcMotor.Direction.FORWARD);
 
+
+        //initialize all our other hardware
+        system = new RobotSystem(hardwareMap);
         // Wait for the game to start (driver presses START)
         waitForStart();
         runtime.reset();
