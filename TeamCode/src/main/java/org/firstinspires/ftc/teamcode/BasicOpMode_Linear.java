@@ -182,9 +182,11 @@ public class BasicOpMode_Linear extends LinearOpMode {
             // Create a vector from the gamepad x/y inputs
             // Then, rotate that vector by the inverse of that heading
             double yval;
-            yval = slewY(gamepad1.left_stick_y);
+        //    yval = slewY(gamepad1.left_stick_y);
+            yval = gamepad1.left_stick_y;
             double xval;
-            xval = slewX(gamepad1.left_stick_x);
+        //    xval = slewX(gamepad1.left_stick_x);
+            xval = gamepad1.left_stick_x;
 
 
             robotdirection = poseEstimate.heading.toDouble();
@@ -206,7 +208,8 @@ public class BasicOpMode_Linear extends LinearOpMode {
 telemetry.update();
 
             PoseVelocity2d rotatedinput = new PoseVelocity2d(
-                    input.linearVel,  (slewR(cubicDelinear(-gamepad1.right_stick_x)*.7)));
+  //                  input.linearVel,  (slewR(cubicDelinear(-gamepad1.right_stick_x)*.7)));
+                    input.linearVel,  (cubicDelinear(-gamepad1.right_stick_x)*.7));
 
             // Pass in the rotated input + right stick value for rotation
             // Rotation is not part of the rotated input thus must be passed in separately
