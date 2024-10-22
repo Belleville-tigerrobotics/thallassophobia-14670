@@ -245,29 +245,7 @@ public class Teleop_testingAprilTagLocalizer extends LinearOpMode {
             // Setup a variable for each drive wheel to save power level for telemetry
             double leftPower;
             double rightPower;
-/*
-                 // Create a vector from the gamepad x/y inputs
-            // Then, rotate that vector by the inverse of that heading
-            Float yval;
-            yval = (gamepad1.left_stick_y);
-            Float xval;
-            xval = (gamepad1.left_stick_x);
 
-            telemetry.addData("yval",yval);
-            telemetry.addData("y",gamepad1.left_stick_y);
-            telemetry.addData("xval",xval);
-            telemetry.addData("x",gamepad1.left_stick_x);
-
-            drive.setDrivePowers(new PoseVelocity2d(
-                    new Vector2d(
-                            -yval,
-                            -xval
-                    ),
-                    -gamepad1.right_stick_x
-            ));
-
-            drive.updatePoseEstimate();
-*/
             //just reset the pose
             if (gamepad1.back) {
                 drive.pose = (new Pose2d(10, 15, Math.toRadians(0)));//was 90

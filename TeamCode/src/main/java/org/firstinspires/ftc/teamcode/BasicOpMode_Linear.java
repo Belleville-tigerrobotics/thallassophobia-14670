@@ -60,12 +60,14 @@ import java.util.Vector;
 public class BasicOpMode_Linear extends LinearOpMode {
 
     // Declare OpMode members.
+    private double trigger = 0;
+
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
 
     private MecanumDrive drive;
-
+    private RobotSystem system;
     private static double cubicDelinear(double input){
         if (input < 0){
             return -(input*input*input*input*.9);
@@ -94,6 +96,10 @@ public class BasicOpMode_Linear extends LinearOpMode {
             }
         }
         prevX=inputX;
+        if (inputX == 0) {
+            prevX=0;
+            returnvalue=0;
+        }
         return returnvalue; // Close enough that you can just use input
     }
     private double slewY(double inputY) {
@@ -106,6 +112,10 @@ public class BasicOpMode_Linear extends LinearOpMode {
             }
         }
         prevY=inputY;
+        if (inputY==0) {
+            prevY=0;
+            returnvalue=0;
+        }
         return returnvalue; // Close enough that you can just use input
     }
 
@@ -118,7 +128,11 @@ public class BasicOpMode_Linear extends LinearOpMode {
                 returnvalue = prevR + SLEW_RATE;
             }
         }
-        prevY=inputR;
+        prevR=inputR;
+        if (inputR==0) {
+            prevR=0;
+            returnvalue=0;
+        }
         return returnvalue; // Close enough that you can just use input
     }
 
@@ -141,7 +155,7 @@ public class BasicOpMode_Linear extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-
+        system = new RobotSystem(hardwareMap);
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
@@ -174,7 +188,6 @@ public class BasicOpMode_Linear extends LinearOpMode {
             //just reset the pose
             if (gamepad1.back) {
                 drive.pose = (new Pose2d(10, 15, Math.toRadians(0)));//was 90
-
             }
 
             Pose2d poseEstimate = drive.pose;
@@ -182,9 +195,12 @@ public class BasicOpMode_Linear extends LinearOpMode {
             // Create a vector from the gamepad x/y inputs
             // Then, rotate that vector by the inverse of that heading
             double yval;
-            yval = slewY(gamepad1.left_stick_y);
+//            yval = slewY(gamepad1.left_stick_y);
+            yval = gamepad1.left_stick_y;
+
             double xval;
-            xval = slewX(gamepad1.left_stick_x);
+//            xval = slewX(gamepad1.left_stick_x);
+            xval = gamepad1.left_stick_x;
 
 
             robotdirection = poseEstimate.heading.toDouble();
@@ -206,7 +222,8 @@ public class BasicOpMode_Linear extends LinearOpMode {
 telemetry.update();
 
             PoseVelocity2d rotatedinput = new PoseVelocity2d(
-                    input.linearVel,  (slewR(cubicDelinear(-gamepad1.right_stick_x)*.7)));
+  //                  input.linearVel,  (slewR(cubicDelinear(-gamepad1.right_stick_x)*.7)));
+                    input.linearVel,  (cubicDelinear(-gamepad1.right_stick_x)*.7));
 
             // Pass in the rotated input + right stick value for rotation
             // Rotation is not part of the rotated input thus must be passed in separately
@@ -215,6 +232,47 @@ telemetry.update();
 
 //don't forget to do this every loop to ensure our location gets updated
             drive.updatePoseEstimate();
+// Here's where we put the other stuff
+            if (gamepad1.dpad_up) {
+                system.arm.setPower(.4);
+            } else if (gamepad1.dpad_down) {
+                    system.arm.setPower(-.4);
+                } else {
+                system.arm.setPower(0);
+            }
+            if (gamepad1.y) {
+                system.intake.setPower(-.9);
+            } else if (gamepad1.x) {
+                system.intake.setPower(1);
+            } else {
+                system.intake.setPower(-.05);
+            }
+
+            if (gamepad1.left_bumper) {
+                system.tiltLift.setPosition(.28);
+            }
+            if (gamepad1.right_bumper) {
+                system.tiltLift.setPosition(1);
+            }
+            if (gamepad1.a) {
+                system.gripper.setPosition(.5);
+            }
+            if (gamepad1.b) {
+                system.gripper.setPosition(0);  //0 is closed
+            }
+
+            trigger = (gamepad1.left_trigger - gamepad1.right_trigger )*.5 ;
+
+            system.leftLift.setPower(trigger);
+            system.rightLift.setPower(-trigger);
+
+            if (gamepad1.dpad_right) {
+                system.extender.setPosition(.4);
+            }
+            if (gamepad1.dpad_left) {
+                system.extender.setPosition(1);
+            }
+
 
         }
     }
