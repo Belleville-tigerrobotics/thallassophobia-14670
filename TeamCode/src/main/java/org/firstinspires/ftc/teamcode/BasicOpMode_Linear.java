@@ -233,43 +233,43 @@ telemetry.update();
 //don't forget to do this every loop to ensure our location gets updated
             drive.updatePoseEstimate();
 // Here's where we put the other stuff
-            if (gamepad1.dpad_up) {
+            if (gamepad2.right_trigger == 1.0f) {
                 system.arm.setPower(.4);
-            } else if (gamepad1.dpad_down) {
-                    system.arm.setPower(-.4);
-                } else {
+            } else if (gamepad2.left_trigger == 1.0f) {
+                system.arm.setPower(-.4);
+            } else {
                 system.arm.setPower(0);
             }
-            if (gamepad1.y) {
+            if (gamepad2.right_bumper) {
                 system.intake.setPower(-.9);
-            } else if (gamepad1.x) {
+            } else if (gamepad2.left_bumper) {
                 system.intake.setPower(1);
             } else {
                 system.intake.setPower(-.05);
             }
 
-            if (gamepad1.left_bumper) {
+            if (gamepad2.x) {
                 system.tiltLift.setPosition(.28);
             }
-            if (gamepad1.right_bumper) {
+            if (gamepad2.y) {
                 system.tiltLift.setPosition(1);
             }
-            if (gamepad1.a) {
+            if (gamepad2.a) {
                 system.gripper.setPosition(.5);
             }
-            if (gamepad1.b) {
+            if (gamepad2.b) {
                 system.gripper.setPosition(0);  //0 is closed
             }
 
-            trigger = (gamepad1.left_trigger - gamepad1.right_trigger )*.5 ;
+            trigger = gamepad2.left_stick_y*.5 ;
 
             system.leftLift.setPower(trigger);
             system.rightLift.setPower(-trigger);
 
-            if (gamepad1.dpad_right) {
+            if (gamepad2.dpad_right) {
                 system.extender.setPosition(.4);
             }
-            if (gamepad1.dpad_left) {
+            if (gamepad2.dpad_left) {
                 system.extender.setPosition(1);
             }
 
