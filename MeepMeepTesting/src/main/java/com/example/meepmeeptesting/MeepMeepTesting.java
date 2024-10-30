@@ -22,11 +22,11 @@ public class MeepMeepTesting {
 
         myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(36, -62, Math.toRadians(90)))
 //go get the first red block
-                .splineToConstantHeading(new Vector2d(42,-12),0)
+                .splineToConstantHeading(new Vector2d(44,-12),0)
                 .setTangent(Math.toRadians(90))
                 .lineToY(-58)
                 .setTangent(Math.toRadians(90))
-                 .splineToConstantHeading(new Vector2d (52,-12),0)
+                 .splineToConstantHeading(new Vector2d (53,-12),0)
                 .setTangent(Math.toRadians(90))
                 .lineToY(-58)
                 .setTangent(Math.toRadians(90))
@@ -34,10 +34,17 @@ public class MeepMeepTesting {
                 .setTangent(Math.toRadians(90))
                 .lineToY(-58)
                 .setTangent(Math.toRadians(90))
-                .lineToY(-54)
+  //              .lineToY(-54)
  //Now let's go place the clip
-                .splineToConstantHeading(new Vector2d(10,-34), Math.toRadians(180))
-
+                .splineToConstantHeading(new Vector2d(10,-39), Math.toRadians(180))
+ //need action to raise elevator to high bar here
+                .setTangent(Math.toRadians(90))
+                .lineToY(-32)  //now drive forward to the bar
+                //need action to clip to bar here
+                .lineToY(-58)
+                        .setTangent(Math.toRadians(90))
+                        .splineToConstantHeading(new Vector2d(38,-20),Math.toRadians(45)) //this should turn us to face the submersible
+//need action to ascend to level 1
                .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)

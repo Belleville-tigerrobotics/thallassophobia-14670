@@ -31,17 +31,12 @@ package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.PoseVelocity2d;
-import com.acmerobotics.roadrunner.Rotation2d;
 import com.acmerobotics.roadrunner.Vector2d;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
-
-import java.util.Vector;
 
 /*
  * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
@@ -56,9 +51,9 @@ import java.util.Vector;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */ // test
 
-@TeleOp(name="Basic: Linear OpMode", group="Linear OpMode")
+@TeleOp(name="Basic: resetRobot", group="Linear OpMode")
 //@Disabled
-public class BasicOpMode_Linear extends LinearOpMode {
+public class OpMode_ResetRobot extends LinearOpMode {
 
     // Declare OpMode members.
     private double trigger = 0;
@@ -178,6 +173,14 @@ public class BasicOpMode_Linear extends LinearOpMode {
         // Wait for the game to start (driver presses START)
         waitForStart();
         runtime.reset();
+//        system.swingArm.setPosition(1);
+        system.wire.setPosition(1);
+        system.tiltLift.setPosition(1);
+        system.extender.setPosition(1);
+
+
+
+
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {

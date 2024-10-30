@@ -1,21 +1,16 @@
-package org.firstinspires.ftc.teamcode.autonomous;
-
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+package org.firstinspires.ftc.teamcode;
 
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
-import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -23,9 +18,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
-import org.firstinspires.ftc.teamcode.AprilTagDrive;
-import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.RobotSystem;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -41,11 +33,7 @@ import java.util.List;
 
 @Config
 @Autonomous(name = "Tiger Auto Beta1", group = "16481-Example")
-public class TigerAutoBeta1 extends LinearOpMode {
-
-
-    private RobotSystem system ;
-
+public class TigerAutoBeta3 extends LinearOpMode {
 
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
@@ -88,14 +76,14 @@ public class TigerAutoBeta1 extends LinearOpMode {
      * The variable to store our instance of the vision portal.
      */
     private VisionPortal visionPortal;
-
+    private RobotSystem system ;
 @Override
 public void runOpMode() {
 
 
         initAprilTag();
-    system = new RobotSystem(hardwareMap);
 
+        system = new RobotSystem(hardwareMap);
 
         AprilTagDrive drive = new AprilTagDrive(hardwareMap, new Pose2d(0, 0, 0), aprilTag);
 
@@ -117,10 +105,31 @@ public void runOpMode() {
             .lineToY(-58)
             .setTangent(Math.toRadians(90))
             //              .lineToY(-54)
-                //Now let's go to ascend -- skip placing the cip
-                .splineToConstantHeading(new Vector2d(38,-20),Math.toRadians(45)) //this should turn us to face the submersible
+                //Now let's go place the clip
+                .splineToConstantHeading(new Vector2d(10,-39), Math.toRadians(180))
 
                 .build();
+
+//then rais the bar, then run trajectory 2
+    Action TrajectoryAction2 = drive.actionBuilder(new Pose2d(36, -62, Math.toRadians(90)))
+
+            //need action to raise elevator to high bar here
+            .setTangent(Math.toRadians(90))
+            .lineToY(-32)  //now drive forward to the bar
+            //need action to clip to bar here
+            .build();
+
+    Action TrajectoryAction3 = drive.actionBuilder(new Pose2d(36, -62, Math.toRadians(90)))
+            .lineToY(-58)
+            .setTangent(Math.toRadians(90))
+            .splineToConstantHeading(new Vector2d(38,-20),Math.toRadians(45)) //this should turn us to face the submersible
+//need action to ascend to level 1
+            .build();
+
+
+//        Action TrajectoryAction2 = drive.actionBuilder(new Pose2d(15, 20, 0))
+//                .splineTo(new Vector2d(5, 5), Math.toRadians(90))
+//                .build();
 
 
         while (!isStopRequested() && !opModeIsActive()) {
@@ -155,18 +164,69 @@ public void runOpMode() {
         );
 //traj1 leaves us in front of the bar ready to raise the elevator
     //traj2 approaches the bar
+    system.PrepareToCliponBar(2);
+    sleep(1000);  // wait for 1 second for us to lift to the bar
+//traj 2 wil drive up to the bar
 
 
+    Actions.runBlocking(
+            new SequentialAction(
+                    TrajectoryAction2, // Example of a drive action
 
-//now put the ascending code here
+                    // This action and the following action do the same thing
+                    new Action() {
+                        @Override
+                        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                            telemetry.addLine("Action!");
+                            telemetry.update();
+                            return false;
+                        }
+                    },
+                    // Only that this action uses a Lambda expression to reduce complexity
+                    (telemetryPacket) -> {
+                        telemetry.addLine("Action!");
+                        telemetry.update();
+                        return false; // Returning true causes the action to run again, returning false causes it to cease
+                    }
+
+            )
+    );
+
+//now need to drop the elevator to attach the clip.
+    //traj3 pulls away from the bar and moves over to get ready to ascend
+    system.ClipOntoBar(1);
+    sleep(2000);
+
+    Actions.runBlocking(
+            new SequentialAction(
+                    TrajectoryAction3, // Example of a drive action
+
+                    // This action and the following action do the same thing
+                    new Action() {
+                        @Override
+                        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                            telemetry.addLine("Action!");
+                            telemetry.update();
+                            return false;
+                        }
+                    },
+                    // Only that this action uses a Lambda expression to reduce complexity
+                    (telemetryPacket) -> {
+                        telemetry.addLine("Action!");
+                        telemetry.update();
+                        return false; // Returning true causes the action to run again, returning false causes it to cease
+                    }
+
+            )
+    );
+
+//now put the ascending code here.
 
 //TODO:  double check these positions
     system.LowerLifttoBottom();
     system.tiltLift.setPosition(0); //tilt the lift forward
     sleep(2000);
     system.wire.setPosition(1); // extend the wire
-
-
 
 
 }
