@@ -32,13 +32,11 @@ package org.firstinspires.ftc.teamcode;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.Vector2d;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
 
 
@@ -56,9 +54,9 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@TeleOp(name="TigerTeleop1", group="")
+@TeleOp(name="HardwareTesting", group="")
 //@Disabled
-public class TigerTeleop1 extends OpMode
+public class HardwareTesting extends OpMode
 {
 
 
@@ -80,8 +78,9 @@ public class TigerTeleop1 extends OpMode
     public boolean liftInMotion = false;
     public double previousTrigger = 0;
     public double trigger=0;
-
-    public PoseVelocity2d ourpose;
+    public boolean testmode = true;
+    public boolean liftAutoMode = false;
+    public int currentLiftHeight =0;
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -92,6 +91,7 @@ public class TigerTeleop1 extends OpMode
         system = new RobotSystem(hardwareMap);
         drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
         system.gripper.setPosition(system.gripClose);  //0 is closed
+
         // Open the robot up for readyness
 //        system.arm.setTargetPosition(1710);
 //        system.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -145,89 +145,125 @@ public class TigerTeleop1 extends OpMode
             liftdirection =0; //not moving
         }
 
+
+
+
         double armTelemetry = system.arm.getCurrentPosition();
         telemetry.addData( "Arm",armTelemetry);
 
-        //let's try out the pose estimate from the camera
-        if (gamepad2.back) {
-            ourpose = drive.updatePoseEstimate();
-        }
-        telemetry.addData("pose",ourpose);
-
 
 // Use the #2 bumpers for the riser
-
-        //this code block manages the riser manual movements.  works together with auto-mode as well
         previousTrigger = trigger;
         trigger = (gamepad2.left_trigger - gamepad2.right_trigger )*.5 ;
-        if (system.liftAutoMode) {
-            system.currentLiftHeight=system.rightLift.getCurrentPosition();
-            if (Math.abs(trigger)>.1) { system.liftAutoMode = false; }
+/*        if (trigger ==0) {triggeriszero=true;} else { triggeriszero=false;}
+//        if (triggeriszero && liftInMotion) {
+            //need to apply the brakes to the lift!
+            liftInMotion = false;
+            if (previousTrigger > 0) { //we were moving UP so need to brake upwards
+                system.leftLift.setTargetPosition(system.leftLift.getCurrentPosition() + 10);
+                system.leftLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                system.leftLift.setPower(.2);
+                system.rightLift.setTargetPosition(system.rightLift.getCurrentPosition() - 10);
+                system.rightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                system.rightLift.setPower(-.2);
+            } else { //we were moving down
+                system.leftLift.setTargetPosition(system.leftLift.getCurrentPosition() - 10);
+                system.leftLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                system.leftLift.setPower(-.2);
+                system.rightLift.setTargetPosition(system.rightLift.getCurrentPosition() + 10);
+                system.rightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                system.rightLift.setPower(.2);
+            }
+        } else if (!(trigger == 0)) {
+            liftInMotion = true;
+            system.leftLift.setPower(trigger);
+            system.rightLift.setPower(-trigger);
         }
-        else {
-            if (trigger > .4) {
-                system.currentLiftHeight = system.currentLiftHeight + 20;
-            }
-            if (trigger > .2) {
-                system.currentLiftHeight = system.currentLiftHeight + 5;
-            }
-            if (trigger < -.4) {
-                system.currentLiftHeight = system.currentLiftHeight - 20;
-            }
-            if (trigger < -.2) {
-                system.currentLiftHeight = system.currentLiftHeight - 5;
-            }
-            if (system.currentLiftHeight < 0) {
-                system.currentLiftHeight = 0;
-            }
-            if (system.currentLiftHeight > 3000) {
-                system.currentLiftHeight = 3000;
-            }
-            system.leftLift.setTargetPosition(-system.currentLiftHeight);
-            system.rightLift.setTargetPosition(system.currentLiftHeight);
+        */
+        if (liftAutoMode) {
+            currentLiftHeight=system.rightLift.getCurrentPosition();
+            if (Math.abs(trigger)>.1) { liftAutoMode = false; }
         }
+         else {
+                if (trigger > .4) {
+                    currentLiftHeight = currentLiftHeight + 20;
+                }
+                if (trigger > .2) {
+                    currentLiftHeight = currentLiftHeight + 5;
+
+                }
+                if (trigger < -.4) {
+                    currentLiftHeight = currentLiftHeight - 20;
+                }
+                if (trigger < -.2) {
+                    currentLiftHeight = currentLiftHeight - 5;
+                }
+                if (currentLiftHeight < 0) {
+                    currentLiftHeight = 0;
+                }
+                if (currentLiftHeight > 3000) {
+                    currentLiftHeight = 3000;
+                }
+                system.leftLift.setTargetPosition(-currentLiftHeight);
+                system.rightLift.setTargetPosition(currentLiftHeight);
+            }
 
 
 
-
-
-// Operate the intake--runs always.  X will expel
-        if (gamepad2.x) {
-            system.intake.setPower(1);}
-        else  {
-            system.intake.setPower(-.8);
+// Operate the intake Use #2 Y to intake, x to expel
+        if (gamepad2.y) {
+            system.intake.setPower(-.9);
+        } else if (gamepad2.x) {
+            system.intake.setPower(1);
+        } else {
+            system.intake.setPower(-.05);
         }
 
 //Operate the gripper @2 A and b
         if (gamepad2.a) {
             system.gripper.setPosition(system.gripOpen);
-        } else {
+        }
+        if (gamepad2.b) {
             system.gripper.setPosition(system.gripClose);  //0 is closed
         }
 
 // #2 use the bumpers for the arm pivot
-        if (gamepad2.left_bumper && gamepad2.right_bumper) {
-            system.arm.setTargetPosition(system.armToPickup);
+        if (gamepad2.left_bumper) {
+            system.arm.setPower(.4);
             pivotarmmovement = true;
+
         } else if (gamepad2.right_bumper) {
-            system.arm.setTargetPosition(system.armOffFloor);
+            system.arm.setPower(-.4);
             pivotarmmovement = true;
-        } else if (gamepad2.left_bumper) {  //trying something stupid...lets see if we brake when running to the current position
-            system.arm.setTargetPosition(system.armUp);
+        } else if (pivotarmmovement) {  //trying something stupid...lets see if we brake when running to the current position
+ //           system.arm.setPower(0);
+ //           system.arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+ //           system.arm.setTargetPosition(system.arm.getCurrentPosition());
+ //           system.arm.setPower(.2);
             pivotarmmovement = false;
+
         }
-
-
 
 //arm extend/retract
         if (gamepad2.dpad_right) {
-            system.extender.setPosition(system.armExtend);
+            liftAutoMode = true;
+            system.PrepareToCliponBar(1);
         }
+ //           system.extender.setPosition(system.armExtend);
+
         if (gamepad2.dpad_left) {
-            system.extender.setPosition(system.armRetract);
+            liftAutoMode = true;
+            system.PrepareToCliponBar(2);
         }
         if (gamepad2.dpad_up) {
-            system.extender.setPosition(system.armMiddle);
+            liftAutoMode = true;
+//            system.extender.setPosition(system.armRetract);
+            system.ClipOntoBar(1);
+        }
+        if (gamepad2.dpad_down) {
+            liftAutoMode = true;
+ //           system.extender.setPosition(system.armMiddle);
+            system.ClipOntoBar(2);
         }
 
 

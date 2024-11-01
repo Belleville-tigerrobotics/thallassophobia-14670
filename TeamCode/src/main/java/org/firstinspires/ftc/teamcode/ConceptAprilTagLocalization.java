@@ -92,9 +92,9 @@ public class ConceptAprilTagLocalization extends LinearOpMode {
      * to +/-90 degrees if it's vertical, or 180 degrees if it's upside-down.
      */
     private Position cameraPosition = new Position(DistanceUnit.INCH,
-            -3.50, 8, 3.5, 0);
+            -8, 0, 8.5, 0);
     private YawPitchRollAngles cameraOrientation = new YawPitchRollAngles(AngleUnit.DEGREES,
-            0, -90, 0, 0);
+            90, -90, 0, 0);
 
     /**
      * The variable to store our instance of the AprilTag processor.

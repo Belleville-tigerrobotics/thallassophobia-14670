@@ -20,8 +20,11 @@ public class MeepMeepTesting {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .build();
 
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(36, -62, Math.toRadians(90)))
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(24, -63, Math.toRadians(90)))
 //go get the first red block
+
+                .splineToConstantHeading(new Vector2d(30,-60),0)
+
                 .splineToConstantHeading(new Vector2d(44,-12),0)
                 .setTangent(Math.toRadians(90))
                 .lineToY(-58)
@@ -30,20 +33,23 @@ public class MeepMeepTesting {
                 .setTangent(Math.toRadians(90))
                 .lineToY(-58)
                 .setTangent(Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d( 62,-12),0)
+                .splineToConstantHeading(new Vector2d( 61,-12),0)
                 .setTangent(Math.toRadians(90))
                 .lineToY(-58)
                 .setTangent(Math.toRadians(90))
   //              .lineToY(-54)
  //Now let's go place the clip
-                .splineToConstantHeading(new Vector2d(10,-39), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(2,-39), Math.toRadians(180))
  //need action to raise elevator to high bar here
                 .setTangent(Math.toRadians(90))
                 .lineToY(-32)  //now drive forward to the bar
                 //need action to clip to bar here
                 .lineToY(-58)
-                        .setTangent(Math.toRadians(90))
-                        .splineToConstantHeading(new Vector2d(38,-20),Math.toRadians(45)) //this should turn us to face the submersible
+                .setTangent(Math.toRadians(90))
+
+                .splineToConstantHeading(new Vector2d(33,-52),0)
+                        .turn(Math.toRadians(65))
+                .splineToConstantHeading(new Vector2d(37,-18), Math.toRadians(90)) //this should turn us to face the submersible
 //need action to ascend to level 1
                .build());
 

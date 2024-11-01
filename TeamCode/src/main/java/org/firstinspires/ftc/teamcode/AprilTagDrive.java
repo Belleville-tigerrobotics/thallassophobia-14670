@@ -218,22 +218,22 @@ public class AprilTagDrive extends MecanumDrive { // TODO: if not using MecanumD
     public static AprilTagLibrary getCenterStageTagLibrary()
     {
         return new AprilTagLibrary.Builder()
-                .addTag(1, "BlueAllianceLeft",
+                .addTag(11, "BlueAllianceLeft",
                         2, new VectorF(61.75f, 41.41f, 4f), DistanceUnit.INCH,
                         new Quaternion(0.3536f, -0.6124f, 0.6124f, -0.3536f, 0))
-                .addTag(2, "BlueAllianceCenter",
+                .addTag(12, "BlueAllianceCenter",
                         2, new VectorF(61.75f, 35.41f, 4f), DistanceUnit.INCH,
                         new Quaternion(0.3536f, -0.6124f, 0.6124f, -0.3536f, 0))
-                .addTag(3, "BlueAllianceRight",
+                .addTag(13, "BlueAllianceRight",
                         2, new VectorF(61.75f, 29.41f, 4f), DistanceUnit.INCH,
                         new Quaternion(0.3536f, -0.6124f, 0.6124f, -0.3536f, 0))
-                .addTag(4, "RedAllianceLeft",
+                .addTag(14, "RedAllianceLeft",
                         2, new VectorF(61.75f, -29.41f, 4f), DistanceUnit.INCH,
                         new Quaternion(0.3536f, -0.6124f, 0.6124f, -0.3536f, 0))
-                .addTag(5, "RedAllianceCenter",
+                .addTag(15, "RedAllianceCenter",
                         2, new VectorF(61.75f, -35.41f, 4f), DistanceUnit.INCH,
                         new Quaternion(0.3536f, -0.6124f, 0.6124f, -0.3536f, 0))
-                .addTag(6, "RedAllianceRight",
+                .addTag(16, "RedAllianceRight",
                         2, new VectorF(61.75f, -41.41f, 4f), DistanceUnit.INCH,
                         new Quaternion(0.3536f, -0.6124f, 0.6124f, -0.3536f, 0))
                 .addTag(7, "RedAudienceWallLarge",

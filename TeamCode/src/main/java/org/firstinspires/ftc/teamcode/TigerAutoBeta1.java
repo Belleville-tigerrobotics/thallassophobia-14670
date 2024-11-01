@@ -14,6 +14,7 @@ import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -40,6 +41,7 @@ import java.util.List;
 
 
 @Config
+@Disabled
 @Autonomous(name = "Tiger Auto Beta1", group = "16481-Example")
 public class TigerAutoBeta1 extends LinearOpMode {
 

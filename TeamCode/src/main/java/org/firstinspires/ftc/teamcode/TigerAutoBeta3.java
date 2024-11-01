@@ -10,6 +10,7 @@ import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
@@ -32,7 +33,8 @@ import java.util.List;
 
 
 @Config
-@Autonomous(name = "Tiger Auto Beta1", group = "16481-Example")
+@Autonomous(name = "Tiger Auto Beta3", group = "16481-Example")
+@Disabled
 public class TigerAutoBeta3 extends LinearOpMode {
 
 
@@ -96,17 +98,17 @@ public void runOpMode() {
             .setTangent(Math.toRadians(90))
             .lineToY(-58)
             .setTangent(Math.toRadians(90))
-            .splineToConstantHeading(new Vector2d (53,-12),0)
+            .splineToConstantHeading(new Vector2d (51,-12),0)
             .setTangent(Math.toRadians(90))
             .lineToY(-58)
             .setTangent(Math.toRadians(90))
-            .splineToConstantHeading(new Vector2d( 62,-12),0)
+            .splineToConstantHeading(new Vector2d( 60,-12),0)
             .setTangent(Math.toRadians(90))
             .lineToY(-58)
             .setTangent(Math.toRadians(90))
             //              .lineToY(-54)
                 //Now let's go place the clip
-                .splineToConstantHeading(new Vector2d(10,-39), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(5,-39), Math.toRadians(180))
 
                 .build();
 
@@ -115,7 +117,7 @@ public void runOpMode() {
 
             //need action to raise elevator to high bar here
             .setTangent(Math.toRadians(90))
-            .lineToY(-32)  //now drive forward to the bar
+            .lineToY(-34)  //now drive forward to the bar
             //need action to clip to bar here
             .build();
 
@@ -139,6 +141,7 @@ public void runOpMode() {
         waitForStart();
 
         if (isStopRequested()) return;
+//first raise the lifter
 
         Actions.runBlocking(
                 new SequentialAction(
@@ -164,6 +167,9 @@ public void runOpMode() {
         );
 //traj1 leaves us in front of the bar ready to raise the elevator
     //traj2 approaches the bar
+    system.tiltLift.setPosition(.28);
+    sleep(2000);
+
     system.PrepareToCliponBar(2);
     sleep(1000);  // wait for 1 second for us to lift to the bar
 //traj 2 wil drive up to the bar
@@ -194,7 +200,7 @@ public void runOpMode() {
 
 //now need to drop the elevator to attach the clip.
     //traj3 pulls away from the bar and moves over to get ready to ascend
-    system.ClipOntoBar(1);
+    system.ClipOntoBar(2);
     sleep(2000);
 
     Actions.runBlocking(

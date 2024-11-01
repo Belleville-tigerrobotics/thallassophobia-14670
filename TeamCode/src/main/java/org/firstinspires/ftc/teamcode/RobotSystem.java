@@ -21,11 +21,17 @@ public class RobotSystem {
     public double armMiddle = .6;
     public double gripClose = .22;
     public double gripOpen = .5;
+    public int armUp = 2000;
+    public int armOffFloor = 150;
+    public int armToPickup = 10;
+
 
     // Set these for the lift measurement in Ticks  -- dg- still need to be determined
     public int liftLowBar = 1000;
-    public int liftHighBar = 2000;
-    public int liftDistanceforClip = 100;//amount to drop when clipping specimen
+    public int liftHighBar = 2020;
+    public int liftDistanceforClip = 525;//amount to drop when clipping specimen
+    public int currentLiftHeight =0;
+    public boolean liftAutoMode = false;
 
 
     public final DcMotorEx leftLift, rightLift, arm;
@@ -41,17 +47,30 @@ public class RobotSystem {
 
         leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         leftLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftLift.setTargetPosition(0);
+//        leftLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
         leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightLift.setTargetPosition(0);
+        rightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+ //       rightLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+ //       rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftLift.setPower(-.5);
+        rightLift.setPower(.5);
+
         arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        arm.setTargetPosition(0);
+        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        arm.setPower(.5);
+
 
         tiltLift = hardwareMap.get(Servo.class, "tiltLift");
         gripper = hardwareMap.get(Servo.class, "gripper");
@@ -75,12 +94,12 @@ public class RobotSystem {
         } else
             runto = liftHighBar;
 
+        leftLift.setTargetPosition(-runto);
+        rightLift.setTargetPosition(runto);
          leftLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftLift.setTargetPosition(runto);
-        rightLift.setTargetPosition(-runto);
-       leftLift.setPower(.3);
-        rightLift.setPower(-.3);
+         rightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+       leftLift.setPower(-.5);
+        rightLift.setPower(.5);
 
         return runto;
     }
@@ -92,23 +111,23 @@ public class RobotSystem {
         } else
             runto = liftHighBar - liftDistanceforClip;
 
+        leftLift.setTargetPosition(-runto);
+        rightLift.setTargetPosition(runto);
         leftLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftLift.setTargetPosition(runto);
-        rightLift.setTargetPosition(-runto);
         leftLift.setPower(-.3);
         rightLift.setPower(.3);
 
         return runto;
     }
 
-    final int LowerLifttoBottom () {
-        leftLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    public int LowerLifttoBottom () {
         leftLift.setTargetPosition(0);
         rightLift.setTargetPosition(0);
-        leftLift.setPower(-.3);
-        rightLift.setPower(.3);
+        leftLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftLift.setPower(.3);
+        rightLift.setPower(-.3);
     return 0;
     }
 
