@@ -80,6 +80,7 @@ public class TigerTeleop1 extends OpMode
     public boolean liftInMotion = false;
     public double previousTrigger = 0;
     public double trigger=0;
+    public boolean rightbumperpressed = false;
 
     public PoseVelocity2d ourpose;
 
@@ -193,9 +194,9 @@ public class TigerTeleop1 extends OpMode
 
 // Operate the intake--runs always.  X will expel
         if (gamepad2.x) {
-            system.intake.setPower(1);}
+            system.intake.setPower(-1);}
         else  {
-            system.intake.setPower(-.8);
+            system.intake.setPower(1);
         }
 
 //Operate the gripper @2 A and b
@@ -206,15 +207,26 @@ public class TigerTeleop1 extends OpMode
         }
 
 // #2 use the bumpers for the arm pivot
-        if (gamepad2.left_bumper && gamepad2.right_bumper) {
-            system.arm.setTargetPosition(system.armToPickup);
+        if (rightbumperpressed && !gamepad2.right_bumper) {
+            system.tiltLift.setPosition(system.liftTiltPark);//park the lift to get it out of the way
+
+            system.arm.setTargetPosition(system.TOarmOffFloor);
             pivotarmmovement = true;
-        } else if (gamepad2.right_bumper) {
-            system.arm.setTargetPosition(system.armOffFloor);
+            rightbumperpressed = false;
+        }
+        if (gamepad2.right_bumper) {
+            system.tiltLift.setPosition(system.liftTiltPark);//park the lift to get it out of the way
+
+            system.arm.setTargetPosition(system.TOarmToPickup);
             pivotarmmovement = true;
-        } else if (gamepad2.left_bumper) {  //trying something stupid...lets see if we brake when running to the current position
-            system.arm.setTargetPosition(system.armUp);
+            rightbumperpressed = true;
+        }
+        if (gamepad2.left_bumper) {
+            system.arm.setTargetPosition(system.TOarmUp);
             pivotarmmovement = false;
+        }
+        if (gamepad2.y) {
+            system.arm.setTargetPosition(system.TOarmtolowbasket);
         }
 
 
@@ -235,13 +247,13 @@ public class TigerTeleop1 extends OpMode
 
 //Riser tilt
         if (gamepad1.dpad_up) {
-            system.tiltLift.setPosition(.28);
+            system.tiltLift.setPosition(system.liftTiltUp);
         }
         if (gamepad1.dpad_down) {
-            system.tiltLift.setPosition(1);
+            system.tiltLift.setPosition(system.liftTiltPark);
         }
         if (gamepad1.dpad_left) {
-            system.tiltLift.setPosition(0);
+            system.tiltLift.setPosition(system.liftTiltHang1);
         }
 
 //        if (gamepad1.a) {

@@ -11,7 +11,7 @@ import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
-public class MeepMeepTesting {
+public class MeepMeepTestingrightside {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(800);
 
@@ -20,9 +20,9 @@ public class MeepMeepTesting {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .build();
 
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-24, -63, Math.toRadians(90)))
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(24, -63, Math.toRadians(90)))
 //go get the first red block
-/*
+
                 .splineToConstantHeading(new Vector2d(30,-60),0)
 
                 .splineToConstantHeading(new Vector2d(44,-12),0)
@@ -51,11 +51,6 @@ public class MeepMeepTesting {
                         .turn(Math.toRadians(65))
                 .splineToConstantHeading(new Vector2d(37,-18), Math.toRadians(90)) //this should turn us to face the submersible
 //need action to ascend to level 1
-*/
-                .splineToConstantHeading(new Vector2d(-24,-55),0)
-                .splineToConstantHeading(new Vector2d(38,-58),0)
-
-
                .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)

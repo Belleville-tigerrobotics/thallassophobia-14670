@@ -10,6 +10,7 @@ import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
@@ -32,8 +33,9 @@ import java.util.List;
 
 
 @Config
-@Autonomous(name = "Tiger Auto Beta4", group = "16481-Example")
-public class TigerAutoBeta4 extends LinearOpMode {
+@Autonomous(name = "Tiger Auto RIGHT NOHANG Ascend", group = "TIGERS")
+@Disabled
+public class TigerAUTOrightNoHangAscend extends LinearOpMode {
 
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
@@ -135,6 +137,8 @@ public void runOpMode() {
             .lineToY(-58)
             .setTangent(Math.toRadians(90))
             .splineToConstantHeading(new Vector2d(38,-20),Math.toRadians(45)) //this should turn us to face the submersible
+            .turn(Math.toRadians(65))
+
 //need action to ascend to level 1
             .build();
 
@@ -150,6 +154,10 @@ public void runOpMode() {
 
         waitForStart();
         system.gripper.setPosition(system.gripClose);
+
+        system.arm.setTargetPosition(system.armUp);
+
+
         if (isStopRequested()) return;
 //first raise the lifter
 
@@ -177,14 +185,14 @@ public void runOpMode() {
         );
 //traj1 leaves us in front of the bar ready to raise the elevator
     //traj2 approaches the bar
-//    system.tiltLift.setPosition(.28);
+    system.tiltLift.setPosition(.28);
 //    sleep(2000);
 
 //    system.PrepareToCliponBar(2);
-//    sleep(1000);  // wait for 1 second for us to lift to the bar
+    sleep(3000);  // wait for 3 second for us to lift to the bar
 //traj 2 wil drive up to the bar
 
-/*
+
     Actions.runBlocking(
             new SequentialAction(
                     TrajectoryAction2, // Example of a drive action
@@ -207,12 +215,12 @@ public void runOpMode() {
 
             )
     );
-*/
+
 //now need to drop the elevator to attach the clip.
     //traj3 pulls away from the bar and moves over to get ready to ascend//
  //   system.ClipOntoBar(2);
- //   sleep(2000);
-/*
+ //   sleep(3000);
+
     Actions.runBlocking(
             new SequentialAction(
                     TrajectoryAction3, // Example of a drive action
@@ -235,15 +243,15 @@ public void runOpMode() {
 
             )
     );
-*/
+
 //now put the ascending code here.
 
 //TODO:  double check these positions
 
-//    system.LowerLifttoBottom();//
-//    system.tiltLift.setPosition(0); //tilt the lift forward
-//    sleep(4000);
-//    system.wire.setPosition(1); // extend the wire
+   system.LowerLifttoBottom();
+    system.tiltLift.setPosition(0); //tilt the lift forward
+    sleep(4000);
+    system.wire.setPosition(1); // extend the wire
 
 
 }

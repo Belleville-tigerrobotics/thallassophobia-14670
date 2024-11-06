@@ -24,6 +24,11 @@ public class RobotSystem {
     public int armUp = 2000;
     public int armOffFloor = 150;
     public int armToPickup = 10;
+    public int TOarmtolowbasket = -950;
+    public int TOarmUp = 0;
+    public int TOarmOffFloor = -1850;
+    public int TOarmToPickup = -2000;
+
 
 
     // Set these for the lift measurement in Ticks  -- dg- still need to be determined
@@ -69,7 +74,7 @@ public class RobotSystem {
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         arm.setTargetPosition(0);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        arm.setPower(.5);
+        arm.setPower(.4);
 
 
         tiltLift = hardwareMap.get(Servo.class, "tiltLift");
