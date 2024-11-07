@@ -19,7 +19,7 @@ public class RobotSystem {
     public double armExtend = .4;
     public double armRetract = 1;
     public double armMiddle = .6;
-    public double gripClose = .22;
+    public double gripClose = .275;
     public double gripOpen = .5;
     public int armUp = 2000;
     public int armOffFloor = 150;

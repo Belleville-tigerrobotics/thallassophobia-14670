@@ -20,10 +20,14 @@ public class MeepMeepTesting {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .build();
 
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-24, -63, Math.toRadians(90)))
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(15, -61, Math.toRadians(90)))
+//start by prepping to clip the specimine
+                .splineToConstantHeading(new Vector2d(2,-30),0)
+
+
 //go get the first red block
-/*
-                .splineToConstantHeading(new Vector2d(30,-60),0)
+
+                .splineToConstantHeading(new Vector2d(31,-60),0)
 
                 .splineToConstantHeading(new Vector2d(44,-12),0)
                 .setTangent(Math.toRadians(90))
@@ -38,23 +42,24 @@ public class MeepMeepTesting {
                 .lineToY(-58)
                 .setTangent(Math.toRadians(90))
   //              .lineToY(-54)
- //Now let's go place the clip
-                .splineToConstantHeading(new Vector2d(2,-39), Math.toRadians(180))
- //need action to raise elevator to high bar here
-                .setTangent(Math.toRadians(90))
-                .lineToY(-32)  //now drive forward to the bar
-                //need action to clip to bar here
-                .lineToY(-58)
-                .setTangent(Math.toRadians(90))
+ //sweeping done.  can stay here to park, or next step to go ascend
 
-                .splineToConstantHeading(new Vector2d(33,-52),0)
-                        .turn(Math.toRadians(65))
-                .splineToConstantHeading(new Vector2d(37,-18), Math.toRadians(90)) //this should turn us to face the submersible
-//need action to ascend to level 1
-*/
+
+                .splineToConstantHeading(new Vector2d(-37,-44), Math.toRadians(180))
+                .setTangent(Math.toRadians(-90))
+                .lineToY(-18)
+
+                .turn(Math.toRadians(-65))
+
+                //now ready to extend the wire
+
+
+
+/* this is left side park only
                 .splineToConstantHeading(new Vector2d(-24,-55),0)
-                .splineToConstantHeading(new Vector2d(38,-58),0)
 
+                .splineToConstantHeading(new Vector2d(38,-58),0)
+*/
 
                .build());
 
