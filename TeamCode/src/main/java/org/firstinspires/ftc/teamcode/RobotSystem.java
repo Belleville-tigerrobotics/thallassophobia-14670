@@ -24,23 +24,25 @@ public class RobotSystem {
     public int armUp = 2000;
     public int armOffFloor = 150;
     public int armToPickup = 10;
-    public int TOarmtolowbasket = -950;
+    public int TOarmtohighbasket = -620;
     public int TOarmUp = 0;
-    public int TOarmOffFloor = -1850;
-    public int TOarmToPickup = -2000;
-
+    public int TOarmOffFloor = -1700;//1850
+    public int TOarmToPickup = -1900;
+    public double wristRetract = .12;
+    public double wristExtend = .8;
 
 
     // Set these for the lift measurement in Ticks  -- dg- still need to be determined
     public int liftLowBar = 1000;
     public int liftHighBar = 2020;
+    public int liftWallPickup = 190;
     public int liftDistanceforClip = 525;//amount to drop when clipping specimen
     public int currentLiftHeight =0;
     public boolean liftAutoMode = false;
 
 
     public final DcMotorEx leftLift, rightLift, arm;
-    public final Servo tiltLift, gripper, extender,  wire;
+    public final Servo tiltLift, gripper, extender,  wire, wrist;
     public final CRServo intake;
     public RevColorSensorV3 colorSensor;
 
@@ -76,6 +78,8 @@ public class RobotSystem {
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         arm.setPower(.4);
 
+        wrist = hardwareMap.get(Servo.class, "wrist");
+        wrist.setPosition(wristRetract);
 
         tiltLift = hardwareMap.get(Servo.class, "tiltLift");
         gripper = hardwareMap.get(Servo.class, "gripper");
@@ -84,7 +88,7 @@ public class RobotSystem {
 //        swingArm = hardwareMap.get(Servo.class, "swingArm");
         wire = hardwareMap.get(Servo.class, "wire");
 
-        colorSensor = hardwareMap.get(RevColorSensorV3.class, "colorSensor");
+ //       colorSensor = hardwareMap.get(RevColorSensorV3.class, "colorSensor");
 
 
     }
@@ -136,6 +140,13 @@ public class RobotSystem {
     return 0;
     }
 
+    public int SetLiftToGrabFromWall () {
+        leftLift.setTargetPosition(-liftWallPickup);
+        rightLift.setTargetPosition(liftWallPickup);
+        currentLiftHeight = liftWallPickup;
+ //       tiltLift.setPosition(liftTiltUp);
+        return 0;
+    }
 
 //    public SetLiftPower(double input) {
 //        leftLift.setPower(input);

@@ -150,7 +150,7 @@ public void runOpMode() {
             //;;              .lineToX(36)
             //              .setTangent(Math.toRadians(-90))
             .splineToConstantHeading(new Vector2d(-24,-55),0)
-            .splineToConstantHeading(new Vector2d(38,-58),0)
+            .splineToConstantHeading(new Vector2d(58,-58),0)
 
             //            .setTangent(Math.toRadians(90))
            // .lineToX(38)

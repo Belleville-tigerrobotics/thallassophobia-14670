@@ -32,7 +32,7 @@ import java.util.List;
 
 
 @Config
-@Autonomous(name = "Tiger Auto RIGHT PARK", group = "TIGERS")
+@Autonomous(name = "Tiger Auto RIGHT Sweep Park ", group = "TIGERS")
 public class TigerAUTOrightPark extends LinearOpMode {
 
 
@@ -100,19 +100,20 @@ public void runOpMode() {
 
                 .splineToConstantHeading(new Vector2d(44,-12),0)
                 .setTangent(Math.toRadians(90))
-                .lineToY(-56)
+         //       .splineToConstantHeading(new Vector2d(44,-52),0
+                            .lineToY(-52)
                 .setTangent(Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d (54,-12),0)
+                .splineToConstantHeading(new Vector2d (60,-12),0)
                 .setTangent(Math.toRadians(90))
-                .lineToY(-56)
+                .lineToY(-52)
                 .setTangent(Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d( 59,-12),0)
+                .splineToConstantHeading(new Vector2d( 69,-12),0)
                 .setTangent(Math.toRadians(90))
-                .lineToY(-56)
+                .lineToY(-52)
                 .setTangent(Math.toRadians(90))
                 //              .lineToY(-54)
                 //Now let's go park
-                .splineToConstantHeading(new Vector2d(51,-56), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(51,-54), Math.toRadians(180))
 
                 .build();
 

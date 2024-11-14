@@ -32,8 +32,8 @@ import java.util.List;
 
 
 @Config
-@Autonomous(name = "Tiger Auto RIGHT Sweep", group = "TIGERS")
-public class TigerAUTOrightSweep extends LinearOpMode {
+@Autonomous(name = "Tiger Auto RIGHT PARK ONLY", group = "TIGERS")
+public class TigerAutoRightParkOnly extends LinearOpMode {
 
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
@@ -85,12 +85,12 @@ public void runOpMode() {
 
         system = new RobotSystem(hardwareMap);
 
-        AprilTagDrive drive = new AprilTagDrive(hardwareMap, new Pose2d(24, -62, 0), aprilTag);
+        AprilTagDrive drive = new AprilTagDrive(hardwareMap, new Pose2d(-24, -62, 0), aprilTag);
 
         //      DcMotor motor1 = hardwareMap.get(DcMotor.class,  "motor");
 
         // Delcare Trajectory as such
-        Action TrajectoryAction1 = drive.actionBuilder(new Pose2d(24, -62, Math.toRadians(90)))
+        Action TrajectoryAction1 = drive.actionBuilder(new Pose2d(-24, -62, Math.toRadians(90)))
             //    /go get the first red block
   //              .setTangent(Math.toRadians(90))
   //;;              .lineToX(36)
@@ -98,7 +98,7 @@ public void runOpMode() {
 
                 .splineToConstantHeading(new Vector2d(30,-60),0)
 
-                .splineToConstantHeading(new Vector2d(42,-12),0)
+                .splineToConstantHeading(new Vector2d(44,-12),0)
                 .setTangent(Math.toRadians(90))
                 .lineToY(-58)
                 .setTangent(Math.toRadians(90))
@@ -135,8 +135,6 @@ public void runOpMode() {
             .lineToY(-58)
             .setTangent(Math.toRadians(90))
             .splineToConstantHeading(new Vector2d(38,-20),Math.toRadians(45)) //this should turn us to face the submersible
-            .turn(Math.toRadians(65))
-
 //need action to ascend to level 1
             .build();
 
@@ -144,6 +142,26 @@ public void runOpMode() {
 //        Action TrajectoryAction2 = drive.actionBuilder(new Pose2d(15, 20, 0))
 //                .splineTo(new Vector2d(5, 5), Math.toRadians(90))
 //                .build();
+
+
+    Action TrajectoryPARK = drive.actionBuilder(new Pose2d(24, -62, Math.toRadians(90)))
+            //    /go get the first red block
+            //              .setTangent(Math.toRadians(90))
+            //;;              .lineToX(36)
+            //              .setTangent(Math.toRadians(-90))
+            .splineToConstantHeading(new Vector2d(26,-55),0)
+            .splineToConstantHeading(new Vector2d(58,-58),0)
+
+            //            .setTangent(Math.toRadians(90))
+           // .lineToX(38)
+
+            .build();
+
+
+
+
+
+
 
 
         while (!isStopRequested() && !opModeIsActive()) {
@@ -155,13 +173,14 @@ public void runOpMode() {
 
         system.arm.setTargetPosition(system.armUp);
 
+        sleep(20000);   // update this once tested to sleep 20 seconds to stay out of the way
 
         if (isStopRequested()) return;
 //first raise the lifter
 
         Actions.runBlocking(
                 new SequentialAction(
-                        TrajectoryAction1, // Example of a drive action
+                        TrajectoryPARK, // Example of a drive action
 
                         // This action and the following action do the same thing
                         new Action() {
@@ -181,44 +200,7 @@ public void runOpMode() {
 
                 )
         );
-//traj1 leaves us in front of the bar ready to raise the elevator
-    //traj2 approaches the bar
-    system.tiltLift.setPosition(.28);
-//    sleep(2000);
-
-//    system.PrepareToCliponBar(2);
-    sleep(3000);  // wait for 3 second for us to lift to the bar
-//traj 2 wil drive up to the bar
-
-
-    Actions.runBlocking(
-            new SequentialAction(
-                    TrajectoryAction2, // Example of a drive action
-
-                    // This action and the following action do the same thing
-                    new Action() {
-                        @Override
-                        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                            telemetry.addLine("Action!");
-                            telemetry.update();
-                            return false;
-                        }
-                    },
-                    // Only that this action uses a Lambda expression to reduce complexity
-                    (telemetryPacket) -> {
-                        telemetry.addLine("Action!");
-                        telemetry.update();
-                        return false; // Returning true causes the action to run again, returning false causes it to cease
-                    }
-
-            )
-    );
-
-//now need to drop the elevator to attach the clip.
-    //traj3 pulls away from the bar and moves over to get ready to ascend//
- //   system.ClipOntoBar(2);
- //   sleep(3000);
-
+/*
     Actions.runBlocking(
             new SequentialAction(
                     TrajectoryAction3, // Example of a drive action
@@ -241,18 +223,15 @@ public void runOpMode() {
 
             )
     );
-
-
-   //needs to get fixed for the hang part
-
+*/
 //now put the ascending code here.
 
 //TODO:  double check these positions
 
-   system.LowerLifttoBottom();
-    system.tiltLift.setPosition(0); //tilt the lift forward
-    sleep(4000);
-    system.wire.setPosition(1); // extend the wire
+//    system.LowerLifttoBottom();//
+//    system.tiltLift.setPosition(0); //tilt the lift forward
+//    sleep(4000);
+//    system.wire.setPosition(1); // extend the wire
 
 
 }
@@ -301,20 +280,6 @@ public void runOpMode() {
         } else {
             builder.setCamera(BuiltinCameraDirection.BACK);
         }
-
-        // Choose a camera resolution. Not all cameras support all resolutions.
-        //builder.setCameraResolution(new Size(640, 480));
-
-        // Enable the RC preview (LiveView).  Set "false" to omit camera monitoring.
-        //builder.enableLiveView(true);
-
-        // Set the stream format; MJPEG uses less bandwidth than default YUY2.
-        //builder.setStreamFormat(VisionPortal.StreamFormat.YUY2);
-
-        // Choose whether or not LiveView stops if no processors are enabled.
-        // If set "true", monitor shows solid orange screen if no processors enabled.
-        // If set "false", monitor shows camera view without annotations.
-        //builder.setAutoStopLiveView(false);
 
         // Set and enable the processor.
         builder.addProcessor(aprilTag);

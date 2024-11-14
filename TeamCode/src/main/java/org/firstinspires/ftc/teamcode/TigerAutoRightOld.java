@@ -34,8 +34,8 @@ import java.util.List;
 
 @Config
 @Disabled
-@Autonomous(name = "Auto RIGHT-HANG-SWEEP-ASCEND", group = "TIGERS")
-public class TigerAutoRIGHTHangSweepASCEND extends LinearOpMode {
+@Autonomous(name = "Tiger Auto RIGHT Old", group = "TIGERS")
+public class TigerAutoRightOld extends LinearOpMode {
 
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
@@ -92,37 +92,60 @@ public void runOpMode() {
         //      DcMotor motor1 = hardwareMap.get(DcMotor.class,  "motor");
 
         // Delcare Trajectory as such
-        Action TrajectoryAction1 = drive.actionBuilder(new Pose2d(15, -61, Math.toRadians(90)))
- //first action takes us to the bar to hand the clip
-                .splineToConstantHeading(new Vector2d(2,-30),0)
+        Action TrajectoryAction1 = drive.actionBuilder(new Pose2d(24, -62, Math.toRadians(90)))
+            //    /go get the first red block
+  //              .setTangent(Math.toRadians(90))
+  //;;              .lineToX(36)
+  //              .setTangent(Math.toRadians(-90))
+
+                .splineToConstantHeading(new Vector2d(30,-60),0)
+
+                .splineToConstantHeading(new Vector2d(42,-12),0)
+                .setTangent(Math.toRadians(90))
+                .lineToY(-58)
+                .setTangent(Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d (51,-12),0)
+                .setTangent(Math.toRadians(90))
+                .lineToY(-58)
+                .setTangent(Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d( 60,-12),0)
+                .setTangent(Math.toRadians(90))
+                .lineToY(-58)
+                .setTangent(Math.toRadians(90))
+                //              .lineToY(-54)
+                //Now let's go place the clip
+                .splineToConstantHeading(new Vector2d(5,-42), Math.toRadians(180))
+
+
+
+
+
+
+
                 .build();
 
+//then rais the bar, then run trajectory 2
+    Action TrajectoryAction2 = drive.actionBuilder(new Pose2d(36, -62, Math.toRadians(90)))
 
-    Action TrajectoryAction2 = drive.actionBuilder(new Pose2d(2, -30, Math.toRadians(90)))
-//second action is for after we've hung the clip--sweep the blocks then park
-            .splineToConstantHeading(new Vector2d(31,-60),0)
-            .splineToConstantHeading(new Vector2d(44,-12),0)
+            //need action to raise elevator to high bar here
             .setTangent(Math.toRadians(90))
+            .lineToY(-34)  //now drive forward to the bar
+            //need action to clip to bar here
+            .build();
+
+    Action TrajectoryAction3 = drive.actionBuilder(new Pose2d(36, -62, Math.toRadians(90)))
             .lineToY(-58)
             .setTangent(Math.toRadians(90))
-            .splineToConstantHeading(new Vector2d (53,-12),0)
-            .setTangent(Math.toRadians(90))
-            .lineToY(-58)
-            .setTangent(Math.toRadians(90))
-            .splineToConstantHeading(new Vector2d( 61,-12),0)
-            .setTangent(Math.toRadians(90))
-            .lineToY(-58)
-            .setTangent(Math.toRadians(90))
+            .splineToConstantHeading(new Vector2d(38,-20),Math.toRadians(45)) //this should turn us to face the submersible
+            .turn(Math.toRadians(65))
+
+//need action to ascend to level 1
             .build();
 
 
-    //third action goes from the park position and ascends on the red side
-    Action TrajectoryAction3 = drive.actionBuilder(new Pose2d(61, -58, Math.toRadians(90)))
-            .splineToConstantHeading(new Vector2d(-37,-44), Math.toRadians(180))
-            .setTangent(Math.toRadians(-90))
-            .lineToY(-18)
-            .turn(Math.toRadians(-65))
-            .build();
+//        Action TrajectoryAction2 = drive.actionBuilder(new Pose2d(15, 20, 0))
+//                .splineTo(new Vector2d(5, 5), Math.toRadians(90))
+//                .build();
 
 
         while (!isStopRequested() && !opModeIsActive()) {
@@ -130,9 +153,9 @@ public void runOpMode() {
         }
 
         waitForStart();
-        system.gripper.setPosition(system.gripClose);//lock the gripper closed
+        system.gripper.setPosition(system.gripClose);
 
-        system.arm.setTargetPosition(system.armUp);//raise the arm
+        system.arm.setTargetPosition(system.armUp);
 
 
         if (isStopRequested()) return;
@@ -162,14 +185,14 @@ public void runOpMode() {
         );
 //traj1 leaves us in front of the bar ready to raise the elevator
     //traj2 approaches the bar
+    system.tiltLift.setPosition(.28);
+//    sleep(2000);
 
-    system.tiltLift.setPosition(system.liftTiltUp);
-    system.PrepareToCliponBar(2);
+//    system.PrepareToCliponBar(2);
     sleep(3000);  // wait for 3 second for us to lift to the bar
-    system.ClipOntoBar(2);
-    sleep(2000);
-    system.tiltLift.setPosition(system.liftTiltPark);
-    sleep(500);
+//traj 2 wil drive up to the bar
+
+
     Actions.runBlocking(
             new SequentialAction(
                     TrajectoryAction2, // Example of a drive action
@@ -193,7 +216,11 @@ public void runOpMode() {
             )
     );
 
-//  this section is if we want to try to ascend
+//now need to drop the elevator to attach the clip.
+    //traj3 pulls away from the bar and moves over to get ready to ascend//
+ //   system.ClipOntoBar(2);
+ //   sleep(3000);
+
     Actions.runBlocking(
             new SequentialAction(
                     TrajectoryAction3, // Example of a drive action
@@ -217,11 +244,14 @@ public void runOpMode() {
             )
     );
 
+
+   //needs to get fixed for the hang part
+
 //now put the ascending code here.
 
 //TODO:  double check these positions
 
-    system.LowerLifttoBottom();
+   system.LowerLifttoBottom();
     system.tiltLift.setPosition(0); //tilt the lift forward
     sleep(4000);
     system.wire.setPosition(1); // extend the wire

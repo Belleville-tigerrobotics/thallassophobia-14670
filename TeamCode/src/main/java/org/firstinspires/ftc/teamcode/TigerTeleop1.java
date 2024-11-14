@@ -32,13 +32,9 @@ package org.firstinspires.ftc.teamcode;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.Vector2d;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
 
 
@@ -67,7 +63,7 @@ public class TigerTeleop1 extends OpMode
 
     RobotSystem system ;
     MecanumDrive drive ;
-
+    public boolean modeSelection = false;
     public boolean triggeriszero = true;
     public double speedx = 0;
     public double speedy = 0;
@@ -90,9 +86,12 @@ public class TigerTeleop1 extends OpMode
     @Override
     public void init() {
         //Initialize the bot
+
         system = new RobotSystem(hardwareMap);
         drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
         system.gripper.setPosition(system.gripClose);  //0 is closed
+        system.wrist.setPosition(system.wristExtend);
+
         // Open the robot up for readyness
 //        system.arm.setTargetPosition(1710);
 //        system.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -122,16 +121,7 @@ public class TigerTeleop1 extends OpMode
      */
     @Override
     public void loop() {
-//read the color sensor
-        NormalizedRGBA colors = system.colorSensor.getNormalizedColors();
-        // Access individual color components
-        double red = colors.red;
-        double green = colors.green;
-        double blue = colors.blue;
-        double alpha = colors.alpha;
-        telemetry.addData("Red", red);
-        telemetry.addData("Green", green);
-        telemetry.addData("Blue", blue);
+
 
         previousLift = liftTelemetry;
         liftTelemetry = system.rightLift.getCurrentPosition();
@@ -148,12 +138,23 @@ public class TigerTeleop1 extends OpMode
 
         double armTelemetry = system.arm.getCurrentPosition();
         telemetry.addData( "Arm",armTelemetry);
+        //Some special Modes for the Accessories Driver (controller b)
 
-        //let's try out the pose estimate from the camera
-        if (gamepad2.back) {
-            ourpose = drive.updatePoseEstimate();
-        }
-        telemetry.addData("pose",ourpose);
+        if (gamepad2.back) { // here we put some special 2 button mode selectors
+            modeSelection = true;
+            if (gamepad2.a) {
+                system.wrist.setPosition(system.wristExtend);
+            }
+            if (gamepad2.b) {
+                system.wrist.setPosition(system.wristRetract);
+            }
+            if (gamepad2.y) {
+                system.SetLiftToGrabFromWall();
+
+            }
+        } else {modeSelection = false;}
+
+
 
 
 // Use the #2 bumpers for the riser
@@ -189,18 +190,15 @@ public class TigerTeleop1 extends OpMode
         }
 
 
-
-
-
 // Operate the intake--runs always.  X will expel
-        if (gamepad2.x) {
+        if (gamepad2.x &&!modeSelection) {
             system.intake.setPower(-1);}
         else  {
             system.intake.setPower(1);
         }
 
 //Operate the gripper @2 A and b
-        if (gamepad2.a) {
+        if (gamepad2.a &&!modeSelection) {
             system.gripper.setPosition(system.gripOpen);
         } else {
             system.gripper.setPosition(system.gripClose);  //0 is closed
@@ -216,7 +214,7 @@ public class TigerTeleop1 extends OpMode
         }
         if (gamepad2.right_bumper) {
             system.tiltLift.setPosition(system.liftTiltPark);//park the lift to get it out of the way
-
+            system.wrist.setPosition(system.wristExtend);
             system.arm.setTargetPosition(system.TOarmToPickup);
             pivotarmmovement = true;
             rightbumperpressed = true;
@@ -225,11 +223,9 @@ public class TigerTeleop1 extends OpMode
             system.arm.setTargetPosition(system.TOarmUp);
             pivotarmmovement = false;
         }
-        if (gamepad2.y) {
-            system.arm.setTargetPosition(system.TOarmtolowbasket);
+        if (gamepad2.y &&!modeSelection) {
+            system.arm.setTargetPosition(system.TOarmtohighbasket);
         }
-
-
 
 //arm extend/retract
         if (gamepad2.dpad_right) {

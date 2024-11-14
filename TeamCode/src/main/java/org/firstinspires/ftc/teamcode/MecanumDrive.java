@@ -56,7 +56,7 @@ import java.util.List;
 public class MecanumDrive {
     public static class Params {
         // IMU orientation
-        // DG-DONE: TODO: fill in these values based on
+        // DG-DONE:
         //   see https://ftc-docs.firstinspires.org/en/latest/programming_resources/imu/imu.html?highlight=imu#physical-hub-mounting
         public RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection =
                 RevHubOrientationOnRobot.LogoFacingDirection.LEFT;
@@ -65,16 +65,16 @@ public class MecanumDrive {
 
         // drive model parameters
         public double inPerTick = 0.002988792029888; //16060 over 48 inches
-        public double lateralInPerTick = 0.002174233835515198;//inPerTick;
-        public double trackWidthTicks = 5121.1248149863;
+        public double lateralInPerTick = 0.0020784347280866514;//inPerTick;
+        public double trackWidthTicks = 5300; //5121.1248149863;
 
         // feedforward parameters (in tick units)
-        public double kS =  0.8393503322332334;
-        public double kV = 0.0005999665543797146;
+        public double kS =  0.8156328429519939;
+        public double kV = 0.0005922484017936075;
         public double kA = 0.0002;
 
         // path profile parameters (in inches)
-        public double maxWheelVel = 50;
+        public double maxWheelVel = 40; // was 50 ddg   changing to 40 to slow it down
         public double minProfileAccel = -30;
         public double maxProfileAccel = 50;
 

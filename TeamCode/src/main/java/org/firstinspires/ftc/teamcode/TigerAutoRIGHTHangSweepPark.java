@@ -10,6 +10,7 @@ import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
@@ -32,7 +33,7 @@ import java.util.List;
 
 
 @Config
-
+@Disabled
 @Autonomous(name = "Auto RIGHT-HANG-SWEEP-PARK", group = "TIGERS")
 public class TigerAutoRIGHTHangSweepPark extends LinearOpMode {
 
