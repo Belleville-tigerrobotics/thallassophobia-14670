@@ -35,8 +35,8 @@ public class RobotSystem {
     // Set these for the lift measurement in Ticks  -- dg- still need to be determined
     public int liftLowBar = 1000;
     public int liftHighBar = 2020;
-    public int liftWallPickup = 190;
-    public int liftDistanceforClip = 525;//amount to drop when clipping specimen
+    public int liftWallPickup = 150;
+    public int liftDistanceforClip = 1089;//amount to drop when clipping specimen
     public int currentLiftHeight =0;
     public boolean liftAutoMode = false;
 
@@ -147,6 +147,16 @@ public class RobotSystem {
  //       tiltLift.setPosition(liftTiltUp);
         return 0;
     }
+
+    public int SetLiftTopullClip () {
+        leftLift.setTargetPosition(-liftDistanceforClip);
+        rightLift.setTargetPosition(liftDistanceforClip);
+        currentLiftHeight = liftDistanceforClip;
+        //       tiltLift.setPosition(liftTiltUp);
+        return 0;
+    }
+
+
 
 //    public SetLiftPower(double input) {
 //        leftLift.setPower(input);

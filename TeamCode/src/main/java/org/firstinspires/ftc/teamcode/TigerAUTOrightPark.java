@@ -113,7 +113,7 @@ public void runOpMode() {
                 .setTangent(Math.toRadians(90))
                 //              .lineToY(-54)
                 //Now let's go park
-                .splineToConstantHeading(new Vector2d(51,-54), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(51,-58), Math.toRadians(180))
 
                 .build();
 

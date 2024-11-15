@@ -155,7 +155,12 @@ public class TigerTeleop1 extends OpMode
         } else {modeSelection = false;}
 
 
-
+        if (gamepad1.y) {
+            system.SetLiftToGrabFromWall();
+        }
+        if (gamepad1.a) {
+            system.SetLiftTopullClip ();
+        }
 
 // Use the #2 bumpers for the riser
 

@@ -172,7 +172,7 @@ public void runOpMode() {
         system.gripper.setPosition(system.gripClose);
 
         system.arm.setTargetPosition(system.armUp);
-
+        sleep(10000);
 
         if (isStopRequested()) return;
 //first raise the lifter
