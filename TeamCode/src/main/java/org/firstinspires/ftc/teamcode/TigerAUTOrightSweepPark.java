@@ -33,7 +33,7 @@ import java.util.List;
 
 @Config
 @Autonomous(name = "Tiger Auto RIGHT Sweep Park ", group = "TIGERS")
-public class TigerAUTOrightPark extends LinearOpMode {
+public class TigerAUTOrightSweepPark extends LinearOpMode {
 
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
@@ -87,16 +87,9 @@ public void runOpMode() {
 
         AprilTagDrive drive = new AprilTagDrive(hardwareMap, new Pose2d(24, -62, 0), aprilTag);
 
-        //      DcMotor motor1 = hardwareMap.get(DcMotor.class,  "motor");
-
         // Delcare Trajectory as such
         Action TrajectoryAction1 = drive.actionBuilder(new Pose2d(24, -62, Math.toRadians(90)))
-            //    /go get the first red block
-  //              .setTangent(Math.toRadians(90))
-  //;;              .lineToX(36)
-  //              .setTangent(Math.toRadians(-90))
-
-                .splineToConstantHeading(new Vector2d(30,-60),0)
+/*                .splineToConstantHeading(new Vector2d(30,-60),0)
 
                 .splineToConstantHeading(new Vector2d(44,-12),0)
                 .setTangent(Math.toRadians(90))
@@ -111,6 +104,33 @@ public void runOpMode() {
                 .setTangent(Math.toRadians(90))
                 .lineToY(-52)
                 .setTangent(Math.toRadians(90))
+                //              .lineToY(-54)
+                //Now let's go park
+                .splineToConstantHeading(new Vector2d(51,-58), Math.toRadians(180))
+*/
+                .splineToConstantHeading(new Vector2d(30,-60),0)
+
+                .splineToConstantHeading(new Vector2d(44,-12),0)
+                .splineToConstantHeading(new Vector2d (44,-52),0)
+                //               .setTangent(Math.toRadians(90))
+                //       .splineToConstantHeading(new Vector2d(44,-52),0
+                //               .lineToY(-52)
+                //              .setTangent(Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d (44,-12),0) //go get second block
+
+                .splineToConstantHeading(new Vector2d (50,-12),0)
+                //              .setTangent(Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d (60,-52),0)
+
+//                .lineToY(-52)
+                //               .setTangent(Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d (55,-12),0)
+
+                .splineToConstantHeading(new Vector2d( 60,-12),0)
+//               .setTangent(Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d (58,-52),0)
+                //              .lineToY(-52)
+                //              .setTangent(Math.toRadians(90))
                 //              .lineToY(-54)
                 //Now let's go park
                 .splineToConstantHeading(new Vector2d(51,-58), Math.toRadians(180))

@@ -90,7 +90,6 @@ public class TigerTeleop1 extends OpMode
         system = new RobotSystem(hardwareMap);
         drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
         system.gripper.setPosition(system.gripClose);  //0 is closed
-        system.wrist.setPosition(system.wristExtend);
 
         // Open the robot up for readyness
 //        system.arm.setTargetPosition(1710);
@@ -114,7 +113,10 @@ public class TigerTeleop1 extends OpMode
     @Override
     public void start() {
         runtime.reset();
+        system.wrist.setPosition(system.wristExtend);
+
     }
+
 
     /*
      * Code to run REPEATEDLY after the driver hits START but before they hit STOP

@@ -91,33 +91,9 @@ public void runOpMode() {
 
         // Delcare Trajectory as such
         Action TrajectoryAction1 = drive.actionBuilder(new Pose2d(24, -62, Math.toRadians(90)))
-            //    /go get the first red block
-  //              .setTangent(Math.toRadians(90))
-  //;;              .lineToX(36)
-  //              .setTangent(Math.toRadians(-90))
+ //even though this is do-nothing we still need to move a couple inches away from the wall to ensure the raised arm doesn't go over the wall
 
-                .splineToConstantHeading(new Vector2d(30,-60),0)
-
-                .splineToConstantHeading(new Vector2d(44,-12),0)
-                .setTangent(Math.toRadians(90))
-                .lineToY(-58)
-                .setTangent(Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d (51,-12),0)
-                .setTangent(Math.toRadians(90))
-                .lineToY(-58)
-                .setTangent(Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d( 60,-12),0)
-                .setTangent(Math.toRadians(90))
-                .lineToY(-58)
-                .setTangent(Math.toRadians(90))
-                //              .lineToY(-54)
-                //Now let's go place the clip
-                .splineToConstantHeading(new Vector2d(5,-42), Math.toRadians(180))
-
-
-
-
-
+                .splineToConstantHeading(new Vector2d(24,-58),0)
 
 
                 .build();
@@ -177,10 +153,10 @@ public void runOpMode() {
         if (isStopRequested()) return;
 //first raise the lifter
 
-/*
+
     Actions.runBlocking(
             new SequentialAction(
-                    TrajectoryAction3, // Example of a drive action
+                    TrajectoryAction1, // Example of a drive action
 
                     // This action and the following action do the same thing
                     new Action() {
@@ -200,16 +176,6 @@ public void runOpMode() {
 
             )
     );
-*/
-//now put the ascending code here.
-
-//TODO:  double check these positions
-
-//    system.LowerLifttoBottom();//
-//    system.tiltLift.setPosition(0); //tilt the lift forward
-//    sleep(4000);
-//    system.wire.setPosition(1); // extend the wire
-
 
 }
 
