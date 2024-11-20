@@ -171,9 +171,6 @@ public void runOpMode() {
         waitForStart();
         system.gripper.setPosition(system.gripClose);
 
-        system.arm.setTargetPosition(system.armUp);
-
-        sleep(20000);   // update this once tested to sleep 20 seconds to stay out of the way
 
         if (isStopRequested()) return;
 //first raise the lifter
@@ -200,6 +197,10 @@ public void runOpMode() {
 
                 )
         );
+    system.arm.setTargetPosition(system.armUp);
+
+    sleep(10000);   // update this once tested to sleep 20 seconds to stay out of the way
+
 /*
     Actions.runBlocking(
             new SequentialAction(

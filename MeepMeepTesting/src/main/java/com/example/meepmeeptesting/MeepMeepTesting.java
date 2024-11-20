@@ -20,8 +20,8 @@ public class MeepMeepTesting {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .build();
 
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(24, -62, Math.toRadians(90)))
-                .splineToConstantHeading(new Vector2d(30,-60),0)
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(2, -30, Math.toRadians(90)))// 24, -62
+/*                .splineToConstantHeading(new Vector2d(30,-60),0)
 
                 .splineToConstantHeading(new Vector2d(44,-12),0)
                         .splineToConstantHeading(new Vector2d (44,-52),0)
@@ -44,6 +44,33 @@ public class MeepMeepTesting {
                 .splineToConstantHeading(new Vector2d (58,-52),0)
   //              .lineToY(-52)
   //              .setTangent(Math.toRadians(90))
+                //              .lineToY(-54)
+                //Now let's go park
+                .splineToConstantHeading(new Vector2d(51,-58), Math.toRadians(180))
+*/
+                .splineToConstantHeading(new Vector2d(30,-60),0)
+
+                .splineToConstantHeading(new Vector2d(44,-14),0)
+                .splineToConstantHeading(new Vector2d (44,-58),0)
+                //               .setTangent(Math.toRadians(90))
+                //       .splineToConstantHeading(new Vector2d(44,-52),0
+                //               .lineToY(-52)
+                //              .setTangent(Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d (44,-14),0) //go get second block
+
+                .splineToConstantHeading(new Vector2d (50,-14),0)
+                //              .setTangent(Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d (50,-58),0)
+
+//                .lineToY(-52)
+                //               .setTangent(Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d (48,-13),0)
+
+                .splineToConstantHeading(new Vector2d( 50,-14),0)
+//               .setTangent(Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d (52,-58),Math.toRadians(90))
+                //              .lineToY(-52)
+                //              .setTangent(Math.toRadians(90))
                 //              .lineToY(-54)
                 //Now let's go park
                 .splineToConstantHeading(new Vector2d(51,-58), Math.toRadians(180))

@@ -110,30 +110,30 @@ public void runOpMode() {
 */
                 .splineToConstantHeading(new Vector2d(30,-60),0)
 
-                .splineToConstantHeading(new Vector2d(44,-12),0)
-                .splineToConstantHeading(new Vector2d (44,-52),0)
+                .splineToConstantHeading(new Vector2d(45,-14),0)
+                .splineToConstantHeading(new Vector2d (44,-58),0)
                 //               .setTangent(Math.toRadians(90))
                 //       .splineToConstantHeading(new Vector2d(44,-52),0
                 //               .lineToY(-52)
                 //              .setTangent(Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d (44,-12),0) //go get second block
+                .splineToConstantHeading(new Vector2d (45,-14),0) //go get second block
 
-                .splineToConstantHeading(new Vector2d (50,-12),0)
+                .splineToConstantHeading(new Vector2d (48,-14),0)
                 //              .setTangent(Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d (60,-52),0)
+                .splineToConstantHeading(new Vector2d (50,-58),0)
 
 //                .lineToY(-52)
                 //               .setTangent(Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d (55,-12),0)
+                .splineToConstantHeading(new Vector2d (48,-13),0)
 
-                .splineToConstantHeading(new Vector2d( 60,-12),0)
+                .splineToConstantHeading(new Vector2d( 50,-14),0)
 //               .setTangent(Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d (58,-52),0)
+                .splineToConstantHeading(new Vector2d (52,-58),Math.toRadians(90))
                 //              .lineToY(-52)
                 //              .setTangent(Math.toRadians(90))
                 //              .lineToY(-54)
                 //Now let's go park
-                .splineToConstantHeading(new Vector2d(51,-58), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(51,-59), Math.toRadians(180))
 
                 .build();
 
